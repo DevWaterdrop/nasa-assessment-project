@@ -2,8 +2,6 @@ import { Stack } from '@mui/material';
 import { useMemo } from 'react';
 import { Picker } from './local-components/Picker';
 
-type SetDate = React.Dispatch<React.SetStateAction<Date | null>>;
-
 interface Props {
   startDate: Date | null;
   endDate: Date | null;
