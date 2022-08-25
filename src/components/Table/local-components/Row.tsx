@@ -1,4 +1,4 @@
-import { Box, Collapse, IconButton, TableCell, TableRow } from '@mui/material';
+import { IconButton, TableCell, TableRow } from '@mui/material';
 import { format } from 'date-fns';
 import { NasaEntry } from '../../../services/nasa-api';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
