@@ -1,7 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { Container } from '@mui/system';
-import { format } from 'date-fns';
-import { useMemo, useState } from 'react';
+import { format, intervalToDuration } from 'date-fns';
+import { useEffect, useMemo, useState } from 'react';
 import { useNasaApi } from '../../hooks/use-nasa-api';
 import { DateRangePicker } from '../DateRangePicker';
 import { Table } from '../Table';
@@ -13,6 +13,7 @@ function getFormatToday() {
 export const App: React.FC = () => {
   const [startDate, setStartDate] = useState<Date | null>(getFormatToday());
   const [endDate, setEndDate] = useState<Date | null>(getFormatToday());
+  const [page, setPage] = useState(0);
 
   const { data, isFetching } = useNasaApi({ startDate, endDate });
 
@@ -26,11 +27,29 @@ export const App: React.FC = () => {
     return startInMs === todayInMs && endInMs === todayInMs;
   }, [startDate, endDate]);
 
+  useEffect(() => {
+    setPage(0);
+  }, [data]);
+
   function handleTodayClick() {
     const today = getFormatToday();
 
     setStartDate(today);
     setEndDate(today);
+  }
+
+  function handleDateChange(type: 'start' | 'end', value: Date | null) {
+    if (type === 'start' && value && endDate) {
+      // Limitation of API – if difference more than 6 days => 400 error
+      const { days } = intervalToDuration({
+        start: value,
+        end: endDate,
+      });
+
+      if (days && days > 6) setEndDate(null);
+    }
+
+    type === 'start' ? setStartDate(value) : setEndDate(value);
   }
 
   return (
@@ -49,11 +68,10 @@ export const App: React.FC = () => {
         <DateRangePicker
           startDate={startDate}
           endDate={endDate}
-          setStartDate={setStartDate}
-          setEndDate={setEndDate}
+          onDateChange={handleDateChange}
         />
       </Stack>
-      <Table data={data} isLoading={isFetching} />
+      <Table data={data} isLoading={isFetching} setPage={setPage} page={page} />
     </Container>
   );
 };

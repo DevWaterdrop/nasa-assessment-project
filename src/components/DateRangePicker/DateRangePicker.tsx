@@ -1,5 +1,4 @@
 import { Stack } from '@mui/material';
-import { intervalToDuration } from 'date-fns';
 import { useMemo } from 'react';
 import { Picker } from './local-components/Picker';
 
@@ -8,12 +7,11 @@ type SetDate = React.Dispatch<React.SetStateAction<Date | null>>;
 interface Props {
   startDate: Date | null;
   endDate: Date | null;
-  setStartDate: SetDate;
-  setEndDate: SetDate;
+  onDateChange: (type: 'start' | 'end', value: Date | null) => unknown;
 }
 
 export const DateRangePicker: React.FC<Props> = (props) => {
-  const { startDate, endDate, setStartDate, setEndDate } = props;
+  const { startDate, endDate, onDateChange } = props;
 
   const maxDate = useMemo(() => {
     const dayInMs = 24 * 60 * 60 * 1000;
@@ -23,18 +21,7 @@ export const DateRangePicker: React.FC<Props> = (props) => {
   }, [startDate]);
 
   function handleDateChange(type: 'start' | 'end') {
-    return (value: Date | null) => {
-      if (type === 'start' && value && endDate) {
-        const { days } = intervalToDuration({
-          start: value,
-          end: endDate,
-        });
-
-        if (days && days >= 7) setEndDate(null);
-      }
-
-      type === 'start' ? setStartDate(value) : setEndDate(value);
-    };
+    return (value: Date | null) => onDateChange(type, value);
   }
 
   return (
