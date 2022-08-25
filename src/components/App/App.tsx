@@ -1,19 +1,58 @@
-import { Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import { Container } from '@mui/system';
-import { useQuery } from 'react-query';
-import { NasaAPI } from '../../services/nasa_api';
+import { format } from 'date-fns';
+import { useMemo, useState } from 'react';
+import { useNasaApi } from '../../hooks/use-nasa-api';
+import { DateRangePicker } from '../DateRangePicker';
 import { Table } from '../Table';
 
+function getFormatToday() {
+  return new Date(format(Date.now(), 'yyyy-MM-dd'));
+}
+
 export const App: React.FC = () => {
-  const { data, isFetching } = useQuery(['today'], () => NasaAPI.getToday(), {
-    refetchOnWindowFocus: false,
-  });
+  const [startDate, setStartDate] = useState<Date | null>(getFormatToday());
+  const [endDate, setEndDate] = useState<Date | null>(getFormatToday());
+
+  const { data, isFetching } = useNasaApi({ startDate, endDate });
+
+  const isToday = useMemo(() => {
+    if (!startDate || !endDate) return false;
+
+    const todayInMs = getFormatToday().getTime();
+    const startInMs = startDate.getTime();
+    const endInMs = endDate.getTime();
+
+    return startInMs === todayInMs && endInMs === todayInMs;
+  }, [startDate, endDate]);
+
+  function handleTodayClick() {
+    const today = getFormatToday();
+
+    setStartDate(today);
+    setEndDate(today);
+  }
 
   return (
     <Container maxWidth="lg">
       <Typography variant="h2" component="h1" marginBottom={2}>
         NASA API
       </Typography>
+      <Stack marginBottom={2} direction="row" flexWrap="wrap" gap={2}>
+        <Button
+          onClick={handleTodayClick}
+          variant="outlined"
+          disabled={isToday}
+        >
+          Today
+        </Button>
+        <DateRangePicker
+          startDate={startDate}
+          endDate={endDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
+        />
+      </Stack>
       <Table data={data} isLoading={isFetching} />
     </Container>
   );

@@ -1,6 +1,6 @@
 import { TableCell, TableRow } from '@mui/material';
 import { format } from 'date-fns';
-import { NasaEntry } from '../../../services/nasa_api';
+import { NasaEntry } from '../../../services/nasa-api';
 
 interface Props {
   entry: NasaEntry;

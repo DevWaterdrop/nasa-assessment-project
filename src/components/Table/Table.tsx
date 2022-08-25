@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { NasaData } from '../../services/nasa_api';
+import { NasaData } from '../../services/nasa-api';
 import { Row } from './local-components/Row';
 import { Loading } from './local-components/Loading';
 import { Head } from './local-components/Head';

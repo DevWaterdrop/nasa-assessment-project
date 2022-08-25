@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { format } from 'date-fns';
 
 export type NasaData = {
   count: number;
@@ -48,11 +49,32 @@ const client = axios.create({
 type ApiRequest = {
   url: string;
   config?: AxiosRequestConfig<unknown>;
+  signal?: AbortSignal;
 };
 
+type DefaultRequest = {
+  signal?: AbortSignal;
+};
+
+type GetByDate = {
+  startDate: Date | null;
+  endDate: Date | null;
+} & DefaultRequest;
+
 export class NasaAPI {
-  static async getToday() {
-    return this.request({ url: 'feed/today' });
+  static async getByDate({ signal, startDate, endDate }: GetByDate) {
+    const _formatDate = (date: Date | null) => {
+      return date ? format(date, 'yyyy-MM-dd') : undefined;
+    };
+
+    const config = {
+      params: {
+        start_date: _formatDate(startDate),
+        end_date: _formatDate(endDate),
+      },
+    };
+
+    return this.request({ url: 'feed', config, signal });
   }
 
   private static transformData = (data: RawNasaResponse) => {
@@ -93,9 +115,9 @@ export class NasaAPI {
     };
   };
 
-  private static async request({ url, config }: ApiRequest) {
+  private static async request({ url, config, signal }: ApiRequest) {
     return client
-      .get<RawNasaResponse>(url, config)
+      .get<RawNasaResponse>(url, { ...config, signal })
       .then((response): NasaData => {
         const data = this.transformData(response.data);
 
