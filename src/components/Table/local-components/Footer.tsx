@@ -3,14 +3,15 @@ import TablePagination from '@mui/material/TablePagination';
 import { PaginationActions } from './PaginationActions';
 
 interface Props {
-  rowsPerPage: number;
   page: number;
+  colSpan: number;
+  rowsPerPage?: number;
   count?: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const Footer: React.FC<Props> = (props) => {
-  const { page, count = 0, rowsPerPage = 10, setPage } = props;
+  const { page, count = 0, rowsPerPage = 10, colSpan, setPage } = props;
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
@@ -21,7 +22,7 @@ export const Footer: React.FC<Props> = (props) => {
       <TableRow>
         <TablePagination
           rowsPerPageOptions={[]}
-          colSpan={6}
+          colSpan={colSpan}
           count={count}
           rowsPerPage={rowsPerPage}
           page={page}

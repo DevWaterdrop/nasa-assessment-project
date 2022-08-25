@@ -9,6 +9,7 @@ import { Row } from './local-components/Row';
 import { Loading } from './local-components/Loading';
 import { Head } from './local-components/Head';
 import { Footer } from './local-components/Footer';
+import { NasaLocalStorage } from '../../services/nasa-local-storage';
 
 interface Props {
   data?: NasaData;
@@ -18,7 +19,7 @@ interface Props {
 }
 
 const ROWS_PER_PAGE = 10;
-
+const COL_SPAN = 7;
 const EMPTY_ROW_STYLE: React.CSSProperties = {
   height: 53 * ROWS_PER_PAGE,
 };
@@ -31,14 +32,21 @@ export const Table: React.FC<Props> = (props) => {
       <MuiTable aria-label="Near-earth objects table">
         <Head />
         <TableBody>
-          {isLoading && <Loading />}
+          {isLoading && <Loading colSpan={COL_SPAN} />}
           {data ? (
             data.entries
               .slice(page * ROWS_PER_PAGE, page * ROWS_PER_PAGE + ROWS_PER_PAGE)
-              .map((entry) => <Row key={entry.name} entry={entry} />)
+              .map((entry) => (
+                <Row
+                  key={entry.name}
+                  entry={entry}
+                  colSpan={COL_SPAN}
+                  defaultNoteValue={NasaLocalStorage.getNoteByName(entry.name)}
+                />
+              ))
           ) : (
             <TableRow style={EMPTY_ROW_STYLE}>
-              <TableCell colSpan={6} />
+              <TableCell colSpan={COL_SPAN} />
             </TableRow>
           )}
         </TableBody>
@@ -47,6 +55,7 @@ export const Table: React.FC<Props> = (props) => {
           page={page}
           setPage={setPage}
           rowsPerPage={ROWS_PER_PAGE}
+          colSpan={COL_SPAN}
         />
       </MuiTable>
     </TableContainer>

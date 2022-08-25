@@ -1,9 +1,12 @@
 import { LinearProgress, TableCell, TableRow } from '@mui/material';
 
+interface Props {
+  colSpan: number;
+}
+
 const ROW_STYLE: React.CSSProperties = {
   position: 'relative',
 };
-
 const CELL_STYLE: React.CSSProperties = {
   position: 'absolute',
   width: '100%',
@@ -11,10 +14,14 @@ const CELL_STYLE: React.CSSProperties = {
   top: 0,
 };
 
-export const Loading: React.FC = () => (
-  <TableRow style={ROW_STYLE}>
-    <TableCell padding="none" colSpan={6} style={CELL_STYLE}>
-      <LinearProgress />
-    </TableCell>
-  </TableRow>
-);
+export const Loading: React.FC<Props> = (props) => {
+  const { colSpan } = props;
+
+  return (
+    <TableRow style={ROW_STYLE}>
+      <TableCell padding="none" colSpan={colSpan} style={CELL_STYLE}>
+        <LinearProgress />
+      </TableCell>
+    </TableRow>
+  );
+};

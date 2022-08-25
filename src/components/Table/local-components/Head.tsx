@@ -9,6 +9,7 @@ export const Head: React.FC = () => (
       <TableCell>Estimated Diameter (m)</TableCell>
       <TableCell>Miss Distance (km)</TableCell>
       <TableCell>Velocity (km/h)</TableCell>
+      <TableCell>Note</TableCell>
     </TableRow>
   </TableHead>
 );

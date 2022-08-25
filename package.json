@@ -17,11 +17,13 @@
     "@mui/x-date-pickers": "^5.0.0-beta.7",
     "axios": "^0.27.2",
     "date-fns": "^2.29.2",
+    "lodash.debounce": "^4.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-query": "^3.39.2"
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.7",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.1",
