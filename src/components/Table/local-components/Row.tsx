@@ -10,7 +10,6 @@ import { NasaLocalStorage } from '../../../services/nasa-local-storage';
 
 interface Props {
   entry: NasaEntry;
-  colSpan: number;
   defaultNoteValue: string | null;
 }
 
@@ -24,7 +23,6 @@ export const Row: React.FC<Props> = (props) => {
       estimatedDiameter,
       velocity,
     },
-    colSpan,
     defaultNoteValue,
   } = props;
 
@@ -61,12 +59,7 @@ export const Row: React.FC<Props> = (props) => {
           </IconButton>
         </TableCell>
       </TableRow>
-      <Note
-        open={open}
-        colSpan={colSpan}
-        onChange={setNote}
-        defaultValue={defaultNoteValue}
-      />
+      <Note open={open} onChange={setNote} defaultValue={defaultNoteValue} />
     </>
   );
 };

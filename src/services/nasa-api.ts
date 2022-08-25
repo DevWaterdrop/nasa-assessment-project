@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 
 export type NasaData = {
   count: number;
@@ -13,6 +13,8 @@ export type NasaEntry = {
   estimatedDiameter: number;
   missDistance: number;
   velocity: number;
+  firstObservation: string;
+  lastObservation: string;
 };
 
 type RawNasaEntry = {
@@ -31,6 +33,10 @@ type RawNasaEntry = {
     meters: {
       estimated_diameter_max: number;
     };
+  };
+  orbital_data: {
+    first_observation_date: string;
+    last_observation_date: string;
   };
 };
 
@@ -69,6 +75,7 @@ export class NasaAPI {
 
     const config = {
       params: {
+        detailed: true,
         start_date: _formatDate(startDate),
         end_date: _formatDate(endDate),
       },
@@ -87,13 +94,18 @@ export class NasaAPI {
           close_approach_data: cad,
           is_potentially_hazardous_asteroid,
           estimated_diameter,
+          orbital_data: { first_observation_date, last_observation_date },
         } = entry;
 
         const { close_approach_date_full, relative_velocity, miss_distance } =
           cad[cad.length - 1];
 
         return {
-          time: new Date(close_approach_date_full),
+          time: parse(
+            close_approach_date_full,
+            'yyyy-MMM-dd HH:mm',
+            new Date()
+          ),
           name,
           potentialHazard: is_potentially_hazardous_asteroid,
           estimatedDiameter: Number(
@@ -101,6 +113,8 @@ export class NasaAPI {
           ),
           missDistance: Number(miss_distance?.kilometers || 0),
           velocity: Number(relative_velocity.kilometers_per_hour),
+          firstObservation: first_observation_date,
+          lastObservation: last_observation_date,
         };
       });
     }

@@ -1,9 +1,9 @@
 import { Collapse, TableCell, TableRow, TextField } from '@mui/material';
 import { Box } from '@mui/system';
+import { COL_SPAN } from '../../../constants';
 
 interface Props {
   open: boolean;
-  colSpan: number;
   onChange: (value: string) => unknown;
   defaultValue: string | null;
 }
@@ -17,11 +17,11 @@ const FIELD_STYLE: React.CSSProperties = {
 };
 
 export const Note: React.FC<Props> = (props) => {
-  const { open, colSpan, onChange, defaultValue } = props;
+  const { open, onChange, defaultValue } = props;
 
   return (
     <TableRow>
-      <TableCell style={CELL_STYLE} colSpan={colSpan}>
+      <TableCell style={CELL_STYLE} colSpan={COL_SPAN}>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Box sx={{ margin: 1 }}>
             <TextField
