@@ -20,7 +20,7 @@ export const Row: React.FC<Props> = (props) => {
 
   return (
     <TableRow key={name}>
-      <TableCell>{format(time, 'dd-mm-yyy HH:MM')}</TableCell>
+      <TableCell>{format(time, 'dd-MM-yyy hh:mm')}</TableCell>
       <TableCell>{name}</TableCell>
       <TableCell>{String(potentialHazard)}</TableCell>
       <TableCell>{Math.floor(estimatedDiameter)}</TableCell>
