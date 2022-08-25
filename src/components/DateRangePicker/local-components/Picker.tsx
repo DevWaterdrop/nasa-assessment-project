@@ -23,7 +23,9 @@ export const Picker: React.FC<Props> = (props) => {
         onChange={(newValue) => {
           handleChange(newValue);
         }}
-        renderInput={(params) => <TextField {...params} />}
+        renderInput={(params) => (
+          <TextField {...params} onKeyDown={(e) => e.preventDefault()} />
+        )}
         minDate={minDate}
         maxDate={maxDate}
       />

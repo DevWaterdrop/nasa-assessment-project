@@ -42,7 +42,7 @@ export const Control: React.FC<Props> = (props) => {
         end: endDate,
       });
 
-      if (days && days > 6) setEndDate(null);
+      if (days && days > 6) setEndDate(value);
     }
 
     type === 'start' ? setStartDate(value) : setEndDate(value);
