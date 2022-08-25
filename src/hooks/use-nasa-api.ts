@@ -9,6 +9,8 @@ interface Props {
 const QUERY_OPTIONS = {
   keepPreviousData: true,
   refetchOnWindowFocus: false,
+  staleTime: 60000,
+  cacheTime: Infinity,
 };
 
 export const useNasaApi = (props: Props) => {
